@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+
+  <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+  <script src="https://unpkg.com/unlazy@0.11.3/dist/unlazy.with-hashing.iife.js" defer init></script>
+  <script src="https://unpkg.com/swiped-events@1.1.4/src/swiped-events.min.js"></script>
+  <script type="text/javascript">
+    window.tailwind.config = {
+      darkMode: ['class'],
+      theme: {
+        extend: {
+          colors: {
+            border: 'hsl(var(--border))',
+            input: 'hsl(var(--input))',
+            ring: 'hsl(var(--ring))',
+            background: 'hsl(var(--background))',
+            foreground: 'hsl(var(--foreground))',
+            primary: {
+              DEFAULT: 'hsl(var(--primary))',
+              foreground: 'hsl(var(--primary-foreground))'
+            },
+            secondary: {
+              DEFAULT: 'hsl(var(--secondary))',
+              foreground: 'hsl(var(--secondary-foreground))'
+            },
+            destructive: {
+              DEFAULT: 'hsl(var(--destructive))',
+              foreground: 'hsl(var(--destructive-foreground))'
+            },
+            muted: {
+              DEFAULT: 'hsl(var(--muted))',
+              foreground: 'hsl(var(--muted-foreground))'
+            },
+            accent: {
+              DEFAULT: 'hsl(var(--accent))',
+              foreground: 'hsl(var(--accent-foreground))'
+            },
+            popover: {
+              DEFAULT: 'hsl(var(--popover))',
+              foreground: 'hsl(var(--popover-foreground))'
+            },
+            card: {
+              DEFAULT: 'hsl(var(--card))',
+              foreground: 'hsl(var(--card-foreground))'
+            },
+          },
+        }
+      }
+    };
+
+    let currentDesignerIndex = 0;
+    const designers = [
+      { name: "Shefali Gupta", video: "v1.mp4", votes: 0 },
+      { name: "Ritu Kumar", video: "v2.mp4", votes: 0 },
+      { name: "Nancy Tyagi", video: "v3.mp4", votes: 0 },
+    ];
+    let hasVoted = localStorage.getItem('hasVoted') === 'true';
+    const contestStartDate = new Date(localStorage.getItem('contestStartDate')) || new Date();
+
+    function updateDesigner() {
+      const designer = designers[currentDesignerIndex];
+      const videoElement = document.getElementById('designerVideo');
+      videoElement.src = designer.video;
+      videoElement.play(); // Start playing the video
+      document.getElementById('designerName').textContent = designer.name;
+      updateLeadingDesigner();
+    }
+
+    function swipeRight() {
+      if (!hasVoted) {
+        designers[currentDesignerIndex].votes++;
+        hasVoted = true;
+        localStorage.setItem('hasVoted', 'true');
+      }
+      nextDesigner();
+    }
+
+    function swipeLeft() {
+      nextDesigner();
+    }
+
+    function nextDesigner() {
+      currentDesignerIndex = (currentDesignerIndex + 1) % designers.length;
+      hasVoted = false; // Reset voting for the next designer
+      updateDesigner();
+    }
+
+    function declareWinner() {
+      const winner = designers.reduce((prev, current) => (prev.votes > current.votes) ? prev : current);
+      alert(`Winner: ${winner.name} with ${winner.votes} votes!`);
+    }
+
+    function updateLeadingDesigner() {
+      const currentTime = new Date();
+      const daysPassed = Math.floor((currentTime - contestStartDate) / (1000 * 60 * 60 * 24));
+      
+      if (daysPassed < 6) {
+        const leader = designers.reduce((prev, current) => (prev.votes > current.votes) ? prev : current);
+        document.getElementById('leadingDesignerName').textContent = `Leading: ${leader.name} with ${leader.votes} votes`;
+      } else if (daysPassed === 6) {
+        declareWinner();
+      } else {
+        document.getElementById('leadingDesignerName').textContent = "Contest has ended.";
+      }
+    }
+
+    window.onload = () => {
+      if (!localStorage.getItem('contestStartDate')) {
+        localStorage.setItem('contestStartDate', new Date());
+      }
+      updateDesigner();
+      const container = document.getElementById('swipeContainer');
+
+      container.addEventListener('swiped-right', swipeRight);
+      container.addEventListener('swiped-left', swipeLeft);
+    };
+  </script>
+  <style type="text/tailwindcss">
+    @layer base {
+      :root {
+        --background: 0 0% 100%;
+        --foreground: 240 10% 3.9%;
+        --card: 0 0% 100%;
+        --card-foreground: 240 10% 3.9%;
+        --popover: 0 0% 100%;
+        --popover-foreground: 240 10% 3.9%;
+        --primary: 240 5.9% 10%;
+        --primary-foreground: 0 0% 98%;
+        --secondary: 240 4.8% 95.9%;
+        --secondary-foreground: 240 5.9% 10%;
+        --muted: 240 4.8% 95.9%;
+        --muted-foreground: 240 3.8% 46.1%;
+        --accent: 240 4.8% 95.9%;
+        --accent-foreground: 240 5.9% 10%;
+        --destructive: 0 84.2% 60.2%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 5.9% 90%;
+        --input: 240 5.9% 90%;
+        --ring: 240 5.9% 10%;
+        --radius: 0.5rem;
+      }
+      .dark {
+        --background: 240 10% 3.9%;
+        --foreground: 0 0% 98%;
+        --card: 240 10% 3.9%;
+        --card-foreground: 0 0% 98%;
+        --popover: 240 10% 3.9%;
+        --popover-foreground: 0 0% 98%;
+        --primary: 0 0% 98%;
+        --primary-foreground: 240 5.9% 10%;
+        --secondary: 240 3.7% 15.9%;
+        --secondary-foreground: 0 0% 98%;
+        --muted: 240 3.7% 15.9%;
+        --muted-foreground: 240 5% 64.9%;
+        --accent: 240 3.7% 15.9%;
+        --accent-foreground: 0 0% 98%;
+        --destructive: 0 62.8% 30.6%;
+        --destructive-foreground: 0 0% 98%;
+        --border: 240 3.7% 15.9%;
+        --input: 240 3.7% 15.9%;
+        --ring: 240 4.9% 83.9%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="min-h-screen flex flex-col bg-background text-foreground">
+    <div class="flex justify-between items-center p-4 bg-card shadow-md">
+      <button class="text-primary" >
+        <i class='bx bx-arrow-back'></i>
+      </button>
+      <div class="flex space-x-4">
+        <i class='bx bx-search'></i>
+        <i class='bx bx-bell'></i>
+        <i class='bx bx-heart'></i>
+        <i class='bx bx-user'></i>
+      </div>
+    </div>
+    
+    <div class="flex flex-col items-center flex-grow p-4" id="swipeContainer">
+      <h1 class="text-xl font-bold mb-4">Fashion Arena</h1>
+      <div class="relative w-full max-w-sm mb-4">
+        <button class="absolute left-0 top-1/2 transform -translate-y-1/2 text-primary">
+          <i class='bx bx-chevron-left' onclick="swipeLeft()"></i>
+        </button>
+        <div class="bg-card p-4 rounded-lg shadow-lg">
+          <a href="designerPage.html">
+            <video id="designerVideo" class="w-full rounded-lg mb-4" controls autoplay muted>
+              <source src="" type="video/mp4">
+              Your browser does not support the video tag.
+            </video>
+          </a>
+          <h2 class="text-lg font-semibold text-center">
+            <a href="designerPage.html" id="designerName">Designer Name</a>
+          </h2>
+          <button class="w-full bg-primary text-primary-foreground py-2 mt-4 rounded-lg hover:bg-primary/80" onclick="window.location.href='buyORrent.html'">Shop or Rent now</button>
+        </div>
+        <button class="absolute right-0 top-1/2 transform -translate-y-1/2 text-primary">
+          <i class='bx bx-chevron-right' onclick="swipeRight()" ></i> 
+        </button>
+      </div>
+      <div id="leadingDesignerName" class="text-center text-primary font-semibold"></div>
+    </div>
+    
+    <div class="flex justify-around items-center p-4 bg-card shadow-inner">
+      <button class="text-primary">
+        <i class='bx bx-home'></i>
+        <span class="block text-xs">Home</span>
+      </button>
+      <button class="text-primary">
+        <i class='bx bx-tv'></i>
+        <span class="block text-xs">Minis</span>
+      </button>
+      <button class="text-primary">
+        <i class='bx bx-trophy'></i>
+        <span class="block text-xs">Contest</span>
+      </button>
+      <button class="text-primary">
+        <i class='bx bx-star'></i>
+        <span class="block text-xs">Trends</span>
+      </button>
+      <button class="text-primary relative">
+        <i class='bx bx-shopping-bag'></i>
+        <span class="block text-xs">Bag</span>
+        <span class="absolute top-0 right-0 bg-destructive text-destructive-foreground rounded-full text-xs px-1">1</span>
+      </button>
+    </div>
+  </div>
+</body>
+</html>
+
+buy

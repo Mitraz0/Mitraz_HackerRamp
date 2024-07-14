@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography"></script>
+    <link rel="stylesheet" href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
+    <script type="text/javascript">
+        let thumbsUpCount = 0;
+        let thumbsDownCount = 0;
+
+        function increaseThumbsUp() {
+            thumbsUpCount++;
+            document.getElementById('thumbsUpCount').textContent = thumbsUpCount;
+        }
+
+        function increaseThumbsDown() {
+            thumbsDownCount++;
+            document.getElementById('thumbsDownCount').textContent = thumbsDownCount;
+        }
+
+        // Countdown timer function
+        function countdownTimer() {
+            const endTime = new Date().getTime() + 3 * 60 * 60 * 1000; // 3 hours from now
+            const interval = setInterval(() => {
+                const now = new Date().getTime();
+                const distance = endTime - now;
+
+                if (distance <= 0) {
+                    clearInterval(interval);
+                    document.getElementById('countdown').textContent = 'Contest Ended';
+                } else {
+                    const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    document.getElementById('countdown').textContent = `Contest ends in: ${hours}:${minutes < 10 ? '0' : ''}${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+                }
+            }, 1000);
+        }
+
+        // Initialize countdown when the page loads
+        window.onload = function() {
+            countdownTimer();
+        };
+    </script>
+    <style>
+        /* Replace with Tailwind CSS classes as needed */
+        /* Example Tailwind CSS classes */
+        .bg-card {
+            background-color: #ffffff;
+        }
+        .text-card-foreground {
+            color: #333333;
+        }
+        .p-6 {
+            padding: 1.5rem;
+        }
+        .max-w-sm {
+            max-width: 24rem;
+        }
+        .mx-auto {
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .rounded-lg {
+            border-radius: 0.5rem;
+        }
+        .shadow-lg {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+        .text-primary {
+            color: #3182ce;
+        }
+        .hover\:text-primary-foreground:hover {
+            color: #e2e8f0;
+        }
+        /* Add more Tailwind CSS classes as needed */
+    </style>
+</head>
+<body>
+    <div class="bg-card text-card-foreground p-6 max-w-sm mx-auto rounded-lg shadow-lg">
+        <div class="flex items-center justify-between mb-6">
+            <button class="text-primary hover:text-primary-foreground transition-colors" onclick="window.location.href='index.html'">
+                <i class='bx bx-arrow-back'></i>
+            </button>
+            <h1 class="text-xl font-bold">Fashion Arena</h1>
+            <div class="flex items-center space-x-3">
+                <button class="text-primary hover:text-primary-foreground transition-colors">
+                    <i class='bx bx-link'></i>
+                </button>
+                <button class="text-primary hover:text-primary-foreground transition-colors">
+                    <i class='bx bx-heart'></i>
+                </button>
+                <span class="bg-red-500 text-white rounded-full px-2 py-1 text-xs">1</span>
+            </div>
+        </div>
+        <img src="Kiara.jpg" alt="Designer dress image" class="w-full rounded-lg mb-6" />
+        <div class="flex justify-between items-center mb-6">
+            <button class="text-primary hover:text-primary-foreground transition-colors">
+                <i class='bx bx-chevron-left'></i>
+            </button>
+            <button class="text-primary hover:text-primary-foreground transition-colors">
+                <i class='bx bx-chevron-right'></i>
+            </button>
+        </div>
+        <div class="flex items-center mb-6">
+            <img src="Shefali.jpeg" alt="Designer image" class="w-12 h-12 rounded-full border-2 border-primary mr-4" />
+            <div>
+                <h2 class="text-lg font-bold">New featured in Fashion Arena</h2>
+                <p class="text-muted-foreground">₹30,000</p>
+            </div>
+        </div>
+        <div class="flex items-center justify-between mb-6">
+            <div class="flex items-center space-x-3">
+                <span class="bg-secondary text-secondary-foreground px-3 py-1 rounded">Fashion Arena</span>
+                <span id="countdown" class="text-muted-foreground"></span>
+            </div>
+            <div class="flex items-center space-x-3">
+                <button class="text-green-500 hover:text-green-700 transition-colors" onclick="increaseThumbsUp()">
+                    <img src="Thumbsup.jpeg" alt="Thumbs Up" class="w-6 h-6"/>
+                </button>
+                <span id="thumbsUpCount" class="text-green-500">0</span>
+                <button class="text-zinc-500 hover:text-zinc-700 transition-colors" onclick="increaseThumbsDown()">
+                    <img src="Thumbsdown.jpeg" alt="Thumbs Down" class="w-6 h-6"/>
+                </button>
+                <span id="thumbsDownCount" class="text-zinc-500">0</span>
+            </div>
+        </div>
+        <div class="flex justify-between">
+            <button class="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">Rent Now</button>
+            <button class="bg-black text-white px-4 py-2 rounded-lg hover:bg-gray-800 transition-colors">Buy Now</button>
+        </div>
+    </div>
+</body>
+</html>
