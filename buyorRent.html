@@ -8,16 +8,26 @@
     <script type="text/javascript">
         let thumbsUpCount = 0;
         let thumbsDownCount = 0;
+        let hasClicked = false; // Track if a user has already clicked a button
 
         function increaseThumbsUp() {
-            thumbsUpCount++;
-            document.getElementById('thumbsUpCount').textContent = thumbsUpCount;
+            if (!hasClicked) {
+                thumbsUpCount++;
+                document.getElementById('thumbsUpCount').textContent = thumbsUpCount;
+                hasClicked = true;
+                document.getElementById('thumbsDownButton').disabled = true;
+            }
         }
 
         function increaseThumbsDown() {
-            thumbsDownCount++;
-            document.getElementById('thumbsDownCount').textContent = thumbsDownCount;
+            if (!hasClicked) {
+                thumbsDownCount++;
+                document.getElementById('thumbsDownCount').textContent = thumbsDownCount;
+                hasClicked = true;
+                document.getElementById('thumbsUpButton').disabled = true;
+            }
         }
+        
 
         // Countdown timer function
         function countdownTimer() {
